@@ -2,6 +2,9 @@ var current_tab = 'dropzone';
 
 function onReady() {
 	
+	loadSettings();
+	start_server();
+	
 	var dropzone = document.getElementById('dropzone');
 	
 	dropzone.ondrop = function (e) {
@@ -61,6 +64,48 @@ function go(tab) {
 			$('section#' + tab ).fadeIn(speed);
 		},speed);
 	});
+}
+
+function loadSettings() {
+	console.log('Loaded settings');
+	var port_setting = document.getElementById('port_setting');
+	var name_setting = document.getElementById('name_setting');
+	
+	if (!(localStorage.settings)) {
+		var settings = {
+				port : 3000,
+				name : "Dropzone"
+		}
+	}
+	else {
+		var settings = JSON.parse(localStorage.settings);
+	}
+	
+	port_setting.value = settings.port;
+	name_setting.value = settings.name;
+	
+	port_setting.onkeyup = function (e) {
+		if (e.which == 13) {
+			extractSettings();
+		}
+	}
+	name_setting.onkeyup = function (e) {
+		if (e.which == 13) {
+			extractSettings();
+		}
+	}
+}
+
+function extractSettings() {
+	console.log('Extracted settings.');
+	var port_setting = document.getElementById('port_setting').value;
+	var name_setting = document.getElementById('name_setting').value;
+	
+	var settings = {
+			port : port_setting,
+			name : name_setting
+	}
+	localStorage.setItem('settings', JSON.stringify(settings));
 }
 
 function feedback(msg) {

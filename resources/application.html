@@ -36,12 +36,12 @@
 			
 			<div id="panel">
 				<ul>
-					<li>Port : <input type="text" value="3000" /></li>
+					<li>Port : <input id="port_setting" type="text"/></li>
 					<sup>If the port is =< 1024, root or admin permissions are required to run this program.</sup>
-					<li>Dropzone name : <input type="text" value="Dropzone" /></li>
+					<li>Dropzone name : <input id="name_setting" type="text"/></li>
 					<sup>This name will be shown to your friends. (e.g Shawn's Dropzone)</sup>
-					<li>About :</li>
-					<p>Hey there! There'll be more info coming later.<br>Stay frosty!</p>
+					<br>
+					<input type="button" value="Save" onclick="extractSettings()"><input type="button" value="Restart Server" onclick="restart_server()" />
 				</ul>
 			</div>
 		</section>
