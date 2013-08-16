@@ -1,6 +1,7 @@
 var http = require('http');
 var fs = require('fs');
 var gui = require('nw.gui');
+var os = require('os');
 
 var win = gui.Window.get();
 
@@ -15,7 +16,7 @@ var dropzone_server = http.createServer(function (req, res) {
 		res.write(fs.readFileSync('./resources/server/header.html'));
 		
 		res.write('<ul>');
-		var files = fs.readdirSync('./files/');
+		var files = fs.readdirSync(process.cwd() + '/files/');
 		for (i = 0; i < files.length; i++) {
 			if (req.url == '/') var file_location = req.url + files[i]; 
 			else var file_location = req.url + '/' + files[i];

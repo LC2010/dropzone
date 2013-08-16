@@ -13,10 +13,18 @@ function onReady() {
 		for (i = 0; i < e.dataTransfer.files.length; i++) {
 				
 			var path = e.dataTransfer.files[i].path;
+			path = path.replace(/\\/g, "/");
 			var filename = path.split('/')[path.split('/').length - 1];
-			console.log(filename);
-			console.log(e.dataTransfer.files[i].path);
-			fs.symlinkSync(e.dataTransfer.files[i].path, './files/' + filename);
+			console.log('Filename : ' + filename);
+			console.log('Path : ' + e.dataTransfer.files[i].path);
+			console.log('Link Path : ' + process.cwd() + '/files/' + filename);
+			if (os.platform() != 'win32') {
+				fs.symlinkSync(e.dataTransfer.files[i].path, process.cwd() + '/files/' + filename, 'file');	
+			}
+			else {
+				fs.linkSync(e.dataTransfer.files[i].path, process.cwd() + '/files/' + filename);
+			}
+			
 		}
 		
 	}
