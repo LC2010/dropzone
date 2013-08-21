@@ -14,8 +14,8 @@ console.log('Dropzone initialized');
 //Function for starting the backend webserver for serving files to clients.
 function start_server() {
 	//Get settings from the localStorage database.
+	
 	var settings = JSON.parse(localStorage.settings);
-
 	console.log('Started the webserver');
 	
 	//Create a new server object
@@ -26,26 +26,28 @@ function start_server() {
 			res.setHeader('Content-Type','text/html');
 			//Load the header.html
 			res.write(fs.readFileSync('./resources/server/header.html'));
-			
+			res.write('<section class="list">')
 			//Start of list generation.
-			res.write('<ul>');
+			res.write('<table>');
 			//Get files in ./files directory.
 			var files = fs.readdirSync(process.cwd() + '/files/');
+			res.write('<tr><th>File</th><th>Download</th></tr>')
 			for (i = 0; i < files.length; i++) {
 				if (req.url == '/') var file_location = req.url + files[i]; 
 				else var file_location = req.url + '/' + files[i];
-				res.write('<li><a href="' + file_location + '">' + files[i] + '</a> | <a href="' + file_location + '?download">Download</a></li>');
+				res.write('<tr><td><a href="' + file_location + '">' + files[i] + '</a></td><td><a href="' + file_location + '?download">Download</a></td></tr>');
 			}
 			//Stop of list generation.
-			res.write('</ul>');
+			res.write('</table>');
 			//Load footer.
 			res.write(fs.readFileSync('./resources/server/footer.html'));
 		}
 		else {
 			var reqtype = req.url.split('?');
-			console.log(reqtype);
 			//Replace all of the URL encoded spaces.
 			req.url = reqtype[0].replace(/%20/g, ' ');
+			reqtype = reqtype[reqtype.length - 1];
+			console.log(reqtype);
 			//Get the file extensions.
 			var file_extension = req.url.split('.')[req.url.split('.').length - 1];
 			
@@ -59,9 +61,21 @@ function start_server() {
 					res.setHeader('Content-type','application/octet-stream');
 					res.write(fs.readFileSync('./files' + req.url));	
 				}
-				else {
-					res.setHeader('Content-type','text/plain');
+				else if (reqtype == 'view') {
 					res.write(fs.readFileSync('./files' + req.url));
+				}
+				else {
+					//If the file extension is an image, show it to the user in the dropzone UI.
+					if (file_extension == 'png' || file_extension == 'jpg' || file_extension == 'jpeg' || file_extension == 'gif') {
+						res.write(fs.readFileSync('./resources/server/header.html'));
+						res.write('<section id="image">');
+						res.write('<img src="' + req.url + '?view" />');
+						res.write(fs.readFileSync('./resources/server/footer.html'));
+					}
+					else {
+						res.setHeader('Content-type','text/plain');
+						res.write(fs.readFileSync('./files' + req.url));	
+					}
 				}
 			}
 			else {
