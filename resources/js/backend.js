@@ -26,7 +26,7 @@ function start_server() {
 			res.setHeader('Content-Type','text/html');
 			//Load the header.html
 			res.write(fs.readFileSync('./resources/server/header.html'));
-			res.write('<section class="list">')
+			res.write('<section id="list">')
 			//Start of list generation.
 			res.write('<table>');
 			//Get files in ./files directory.
@@ -48,7 +48,8 @@ function start_server() {
 			req.url = reqtype[0].replace(/%20/g, ' ');
 			reqtype = reqtype[reqtype.length - 1];
 			console.log(reqtype);
-			//Get the file extensions.
+			//Get the filename and extension.
+			var filename = req.url.split('/')[req.url.split('/').length - 1];
 			var file_extension = req.url.split('.')[req.url.split('.').length - 1];
 			
 			//If the file extension is .server, then load the file from server resources.
@@ -67,11 +68,19 @@ function start_server() {
 				else {
 					//If the file extension is an image, show it to the user in the dropzone UI.
 					if (file_extension == 'png' || file_extension == 'jpg' || file_extension == 'jpeg' || file_extension == 'gif') {
-						var filename = req.url.split('/')[req.url.split('/').length - 1];
 						res.write(fs.readFileSync('./resources/server/header.html'));
 						res.write('<section id="image">');
 						res.write('<h3>Image - ' + filename + '</h3>');
 						res.write('<img src="' + req.url + '?raw" />');
+						res.write(fs.readFileSync('./resources/server/footer.html'));
+					}
+					else if (file_extension == 'txt' || file_extension == 'cfg' || file_extension == 'yml' || file_extension == 'rtf'/* Probably more support for textfiles in the future. */) {
+						res.write(fs.readFileSync('./resources/server/header.html'));
+						res.write('<section id="text">');
+						res.write('<h3>Text file : ' + filename + '</h3>');
+						res.write('<div>');
+						res.write(fs.readFileSync('./files' + req.url));
+						res.write('</div>');
 						res.write(fs.readFileSync('./resources/server/footer.html'));
 					}
 					else {
