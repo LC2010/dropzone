@@ -61,7 +61,7 @@ function start_server() {
 					res.setHeader('Content-type','application/octet-stream');
 					res.write(fs.readFileSync('./files' + req.url));	
 				}
-				else if (reqtype == 'view') {
+				else if (reqtype == 'raw') {
 					res.write(fs.readFileSync('./files' + req.url));
 				}
 				else {
@@ -71,7 +71,7 @@ function start_server() {
 						res.write(fs.readFileSync('./resources/server/header.html'));
 						res.write('<section id="image">');
 						res.write('<h3>Image - ' + filename + '</h3>');
-						res.write('<img src="' + req.url + '?view" />');
+						res.write('<img src="' + req.url + '?raw" />');
 						res.write(fs.readFileSync('./resources/server/footer.html'));
 					}
 					else {
