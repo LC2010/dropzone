@@ -26,16 +26,48 @@ header h1 {
 
 /* Section styles */
 
-section {
-    margin:-2px auto 0 auto;
-    height:70%;
-    max-width:400px;
-    padding:10px 20px;
-    background-color:#111;
-    border:solid 2px #000;
-    border-top:none;
-    
+div#wrapper {
+    max-width:1000px;
+    margin:20px auto 0 auto;
 }
+
+section#sidebar {
+    background-color:#111;
+    max-width:300px;
+    padding:5px 10px 10px 10px;
+    float:left;
+}
+
+section#sidebar ul {
+    padding-left:0px;
+}
+
+section#sidebar ul li {
+    list-style:none;
+}
+
+section.list {
+    margin-left:30px;
+    background-color:#111;
+    padding:20px;
+    float:left;
+}
+
+section#image {
+    float:left;
+    max-width:700px;
+    padding:20px;
+    background-color:#111;
+    margin-left:20px;
+}
+
+section#image img {
+    max-width:700px;
+}
+
+/* Table styles */
+
+
 
 /* List styles */
 
@@ -45,7 +77,6 @@ ul {
 }
 
 ul li {
-    list-style-type: circle;
-    
+    list-style-type: none;
     margin-left: 10px;
 }
