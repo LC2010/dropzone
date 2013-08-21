@@ -34,7 +34,7 @@ div#wrapper {
 section#sidebar {
     background-color:#111;
     max-width:300px;
-    padding:5px 10px 10px 10px;
+    padding: 20px;
     float:left;
 }
 
@@ -50,13 +50,14 @@ section.list {
     margin-left:30px;
     background-color:#111;
     padding:20px;
+    min-width: 300px;
     float:left;
 }
 
 section#image {
     float:left;
     max-width:700px;
-    padding:20px;
+    padding: 0px 20px 20px 20px;
     background-color:#111;
     margin-left:20px;
 }
