@@ -67,8 +67,10 @@ function start_server() {
 				else {
 					//If the file extension is an image, show it to the user in the dropzone UI.
 					if (file_extension == 'png' || file_extension == 'jpg' || file_extension == 'jpeg' || file_extension == 'gif') {
+						var filename = req.url.split('/')[req.url.split('/').length - 1];
 						res.write(fs.readFileSync('./resources/server/header.html'));
 						res.write('<section id="image">');
+						res.write('<h3>Image - ' + filename + '</h3>');
 						res.write('<img src="' + req.url + '?view" />');
 						res.write(fs.readFileSync('./resources/server/footer.html'));
 					}
