@@ -41,6 +41,7 @@ function start_server() {
 			res.write('</table>');
 			//Load footer.
 			res.write(fs.readFileSync('./resources/server/footer.html'));
+			res.write('<script type="text/javascript"> $("header h1").html("' + getSettings().name + '") </script>');
 		}
 		else {
 			var reqtype = req.url.split('?');
@@ -74,7 +75,7 @@ function start_server() {
 						res.write('<img src="' + req.url + '?raw" />');
 						res.write(fs.readFileSync('./resources/server/footer.html'));
 					}
-					else if (file_extension == 'txt' || file_extension == 'cfg' || file_extension == 'yml' || file_extension == 'rtf'/* Probably more support for textfiles in the future. */) {
+					else if (file_extension == 'txt' || file_extension == 'cfg' || file_extension == 'yml' || file_extension == 'rtf' || file_extension == 'bat' || file_extension == 'properties'/* Probably more support for textfiles in the future. */) {
 						res.write(fs.readFileSync('./resources/server/header.html'));
 						res.write('<section id="text">');
 						res.write('<h3>Text file : ' + filename + '</h3>');
@@ -121,4 +122,10 @@ function resetFiles() {
 	for (i = 0; i < files.length; i++) {
 		fs.unlinkSync('./files/' + files[i]);
 	}
+}
+
+function getSettings() {
+	var settings = JSON.parse(localStorage.settings);
+	
+	return settings;
 }
