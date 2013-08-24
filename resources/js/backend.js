@@ -70,6 +70,9 @@ function start_server() {
 					//If the file extension is an image, show it to the user in the dropzone UI.
 					if (file_extension == 'png' || file_extension == 'jpg' || file_extension == 'jpeg' || file_extension == 'gif') {
 						res.write(fs.readFileSync('./resources/server/header.html'));
+						var sidebar = makeDetailList('./files' + req.url, req.url);
+						res.write(sidebar);
+						//res.write(makeDetailList('./files' + req.url));
 						res.write('<section id="image">');
 						res.write('<h3>Image - ' + filename + '</h3>');
 						res.write('<img src="' + req.url + '?raw" />');
@@ -77,6 +80,8 @@ function start_server() {
 					}
 					else if (file_extension == 'txt' || file_extension == 'cfg' || file_extension == 'yml' || file_extension == 'rtf' || file_extension == 'bat' || file_extension == 'properties'/* Probably more support for textfiles in the future. */) {
 						res.write(fs.readFileSync('./resources/server/header.html'));
+						var sidebar = makeDetailList('./files' + req.url, req.url);
+						res.write(sidebar);
 						res.write('<section id="text">');
 						res.write('<h3>Text file : ' + filename + '</h3>');
 						res.write('<div>');
@@ -122,6 +127,43 @@ function resetFiles() {
 	for (i = 0; i < files.length; i++) {
 		fs.unlinkSync('./files/' + files[i]);
 	}
+}
+
+function makeDetailList(location, url) {
+	var stats = fs.lstatSync(location);
+	
+	var file = {
+			size : stats.size,
+			changed : stats.mtime,
+			type : location.split('.')[location.split('.').length - 1]
+	}
+	
+	if (file.size > 1024) {
+		file.size = Math.floor((file.size / 1024) * 10) / 10 + ' kB';
+	}
+	else if (file.size > 1024 * 1024) {
+		file.size = file.size / Math.floor((1024 * 1024) * 10) / 10 + ' MB'; 
+	}
+	else if (file.size > 1024 * 1024 * 1024) {
+		file.size = file.size / Math.floor((1024 * 1024 * 1024) * 10) / 10 + ' GB';
+	}
+	else {
+		file.size += ' b';
+	}
+	
+	var str = '<section id="sidebar">';
+	str += '<h3>File details</h3>';
+	str += '<ul>';
+	str += '<li>Size : ' + file.size + '</li>';
+	str += '<li>Extension/Type : ' + file.type + '</li>';
+	str += '<li>Last changed : <br>' + file.changed + '</li>';
+	str += '<li>Download : <a href="' + url + '?download">Download</a>';
+	str += '</ul>';
+	str += '</section>';
+	
+	console.log(str);
+	
+	return str
 }
 
 function getSettings() {

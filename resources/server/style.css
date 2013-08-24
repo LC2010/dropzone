@@ -5,8 +5,25 @@ body {
     color:#FFF;
     font-family:sans-serif;
     background-image:url('/txture.png.server');
-    paddong:0px;
-    margin:0px;
+    padding: 0px;
+    margin: 100px auto 100px auto;
+    max-width: 1000px;
+    max-height: 1000px;
+    border: solid 4px #BB381E;
+}
+
+a {
+    color:#0080ff;
+    text-decoration:none;
+}
+
+a:hover {
+   text-decoration:underline;
+}
+
+a.a2a_dd, a.a2a_dd:hover {
+	color:#FFF;
+	text-decoration:none;
 }
 
 /* Header styles */
@@ -16,64 +33,119 @@ header {
 	padding: 0px 20px 0px 20px;
 	height: 55px;
 	border-bottom: solid 2px #000;
-	box-shadow: 0px 0px 120px 20px #000;
+	border-top-left-radius: 5px;
+	border-top-right-radius: 5px;
 }
 
 header h1 {
     float:left;
+    font-size: 34px;
     line-height: 13px;
+    margin-top: 20px;
 }
 
 /* Section styles */
 
 div#wrapper {
     max-width:1000px;
-    margin:20px auto 0 auto;
+    margin: 0px auto 0 auto;
+    background-color: #222;
+    height: 85%;
+    overflow-y: hidden;
 }
 
-section#sidebar {
+section#underbar {
     background-color:#111;
-    max-width:300px;
-    padding: 20px;
-    float:left;
+    position: absolute;
+    bottom: 100px;
+    height: 70px;
+    margin-bottom: 3px;
+    border-bottom-left-radius: 2px;
+    border-bottom-right-radius: 2px;
+    width: 1000px;
+    border-top:solid 2px #000;
 }
 
-section#sidebar ul {
+section#underbar ul {
     padding-left:0px;
+    position: relative;
+    bottom: -4px;
+    width: 1000px;
 }
 
-section#sidebar ul li {
+section#underbar ul li {
     list-style:none;
+    float: left;
+    margin-left: 20.7%;
+}
+
+section#underbar ul li span {
+    display: none;
+    background-color: #000;
+    padding: 10px;
+    border-radius: 10px;
+    opacity: 0.6;
+    position: absolute;
+    margin-left: -6%;
+    bottom: 11px;
 }
 
 section#list {
-    margin-left:30px;
-    background-color:#111;
-    padding:20px;
-    min-width: 300px;
+    min-width: 100%;
+    /*min-height:97%;*/
     float:left;
+    overflow-x: hidden;
+    overflow-y:auto;
 }
 
-section#image {
-    float:left;
-    max-width:700px;
-    padding: 0px 20px 20px 20px;
+section#list table tbody tr:first-child th {
+    padding-bottom:10px !important;
+    padding-top:10px !important;
+    border-bottom:solid 1px #111;
+}
+
+section#list table tbody tr td {
+    padding:5px 0px 10px 0px;
+    border-top:solid 1px #333 !important;
+    border-bottom:solid 1px #111 !important;
+    border-left: solid 1px #111;
+    border-right: solid 1px #333;
+}
+
+section#list table tbody tr:last-child td {
+    border-bottom: none !important;
+}
+
+section#list table tbody tr th:first-child, section#list table tbody tr td:first-child {
+    width: 65%;
+    text-align: center;
+}
+section#list table tbody tr th:last-child, section#list table tbody tr td:last-child {
+    text-align: center;
+    width: 10%;
+}
+
+section#list table {
+    width:100%;
+}
+
+section#image, section#text {
+    float: right;
     background-color:#111;
-    margin-left:20px;
+    width: 70%;
+    height: 100%;
+    overflow-y: auto;
+}
+
+section h3 {
+    padding:15px;
+    font-size:25px
+;
 }
 
 section#image img {
-    max-width:700px;
-}
-
-section#text {
-    max-width:700px;
-    float:left;
-    background-color:#111;
-    padding:20px;
-    padding-top:0px;
-    margin-left:30px;
-    
+    max-width:100%;
+    min-width:100%;
 }
 
 section#text div {
@@ -82,18 +154,21 @@ section#text div {
     padding:10px;
 }
 
-/* Table styles */
-
-
-
-/* List styles */
-
-ul {
-    padding-left:0px;
-    list-style: none;
+section#sidebar {
+	float:left;
+	width:30%;
 }
 
-ul li {
-    list-style-type: none;
-    margin-left: 10px;
+section#sidebar ul li {
+	border-top:solid 1px #333;
+	border-bottom:solid 1px #000;
+	padding:10px 15px 10px 15px;
+}
+
+section#sidebar ul li:first-child {
+	border-top:none;
+}
+
+section#sidebar ul li:last-child {
+	border-bottom:none;
 }
