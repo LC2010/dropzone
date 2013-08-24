@@ -3,6 +3,8 @@ var http = require('http');
 var fs = require('fs');
 var gui = require('nw.gui');
 var os = require('os');
+var url = require('url');
+var zip = require('node-native-zip');
 
 var win = gui.Window.get();
 
@@ -31,11 +33,11 @@ function start_server() {
 			res.write('<table>');
 			//Get files in ./files directory.
 			var files = fs.readdirSync(process.cwd() + '/files/');
-			res.write('<tr><th>File</th><th>Download</th></tr>')
+			res.write('<tr><th>Select</th><th>File</th><th>Download</th></tr>')
 			for (i = 0; i < files.length; i++) {
 				if (req.url == '/') var file_location = req.url + files[i]; 
 				else var file_location = req.url + '/' + files[i];
-				res.write('<tr><td><a href="' + file_location + '">' + files[i] + '</a></td><td><a href="' + file_location + '?download">Download</a></td></tr>');
+				res.write('<tr><td><input type="checkbox" class="' + files[i] + '" /></td><td><a href="' + file_location + '">' + files[i] + '</a></td><td><a href="' + file_location + '?download">Download</a></td></tr>');
 			}
 			//Stop of list generation.
 			res.write('</table>');
@@ -43,12 +45,15 @@ function start_server() {
 			res.write(fs.readFileSync('./resources/server/footer.html'));
 			res.write('<script type="text/javascript"> $("header h1").html("' + getSettings().name + '") </script>');
 		}
+		else if (req.url =='/dropzone-v0.0.1.zip') {
+			res.setHeader('Content-type', 'application/octet-stream');
+			res.end(fs.readFileSync('./resources/server/dropzone.zip'));
+		}
 		else {
+			var request = url.parse(req.url);
 			var reqtype = req.url.split('?');
 			//Replace all of the URL encoded spaces.
 			req.url = reqtype[0].replace(/%20/g, ' ');
-			reqtype = reqtype[reqtype.length - 1];
-			console.log(reqtype);
 			//Get the filename and extension.
 			var filename = req.url.split('/')[req.url.split('/').length - 1];
 			var file_extension = req.url.split('.')[req.url.split('.').length - 1];
@@ -58,46 +63,70 @@ function start_server() {
 				var actual_file = req.url.split('.')[req.url.split('.').length - 3] + '.' + req.url.split('.')[req.url.split('.').length - 2];
 				res.end(fs.readFileSync('./resources/server/' + actual_file));
 			}
-			else if (fs.existsSync('./files' + req.url)) {
-				if (reqtype == 'download') {
-					res.setHeader('Content-type','application/octet-stream');
-					res.write(fs.readFileSync('./files' + req.url));	
+			else {
+				if (request.query) {
+					
+					if (request.query.split('&')[0] == 'zip') {
+						var query = request.query;
+						var files = query.split('&');
+						console.log();
+						var archive = new zip();
+						for (i = 1; i < files.length; i++) {
+							archive.add(files[i], fs.readFileSync('./files/' + files[i]));
+						}
+						
+						var buffer = archive.toBuffer();
+						var timestamp = os.uptime();
+						
+						fs.writeFileSync('./tmp/togo_' + timestamp + '.zip', buffer);
+						//console.log(fs.existsSync('./tmp/togo_' + timestamp + '.zip', buffer));
+						res.setHeader('Content-disposition', 'attachment; filename=Dropzone To go package.zip');
+						res.end(fs.readFileSync('./tmp/togo_' + timestamp + '.zip'));
+						
+					}	
 				}
-				else if (reqtype == 'raw') {
-					res.write(fs.readFileSync('./files' + req.url));
-				}
-				else {
-					//If the file extension is an image, show it to the user in the dropzone UI.
-					if (file_extension == 'png' || file_extension == 'jpg' || file_extension == 'jpeg' || file_extension == 'gif') {
-						res.write(fs.readFileSync('./resources/server/header.html'));
-						var sidebar = makeDetailList('./files' + req.url, req.url);
-						res.write(sidebar);
-						//res.write(makeDetailList('./files' + req.url));
-						res.write('<section id="image">');
-						res.write('<h3>Image - ' + filename + '</h3>');
-						res.write('<img src="' + req.url + '?raw" />');
-						res.write(fs.readFileSync('./resources/server/footer.html'));
-					}
-					else if (file_extension == 'txt' || file_extension == 'cfg' || file_extension == 'yml' || file_extension == 'rtf' || file_extension == 'bat' || file_extension == 'properties'/* Probably more support for textfiles in the future. */) {
-						res.write(fs.readFileSync('./resources/server/header.html'));
-						var sidebar = makeDetailList('./files' + req.url, req.url);
-						res.write(sidebar);
-						res.write('<section id="text">');
-						res.write('<h3>Text file : ' + filename + '</h3>');
-						res.write('<div>');
+				else if (fs.existsSync('./files' + req.url)) {
+					if (request.query == 'download') {
+						res.setHeader('Content-type','application/octet-stream');
 						res.write(fs.readFileSync('./files' + req.url));
-						res.write('</div>');
-						res.write(fs.readFileSync('./resources/server/footer.html'));
+					}
+					else if (request.query == 'raw') {
+						res.write(fs.readFileSync('./files' + req.url));
 					}
 					else {
-						res.setHeader('Content-type','text/plain');
-						res.write(fs.readFileSync('./files' + req.url));	
+						//If the file extension is an image, show it to the user in the dropzone UI.
+						if (file_extension == 'png' || file_extension == 'jpg' || file_extension == 'jpeg' || file_extension == 'gif') {
+							res.write(fs.readFileSync('./resources/server/header.html'));
+							var sidebar = makeDetailList('./files' + req.url, req.url);
+							res.write(sidebar);
+							//res.write(makeDetailList('./files' + req.url));
+							res.write('<section id="image">');
+							res.write('<h3>Image - ' + filename + '</h3>');
+							res.write('<img src="' + req.url + '?raw" />');
+							res.write(fs.readFileSync('./resources/server/footer.html'));
+						}
+						else if (file_extension == 'txt' || file_extension == 'cfg' || file_extension == 'yml' || file_extension == 'rtf' || file_extension == 'bat' || file_extension == 'properties'/* Probably more support for textfiles in the future. */) {
+							res.write(fs.readFileSync('./resources/server/header.html'));
+							var sidebar = makeDetailList('./files' + req.url, req.url);
+							res.write(sidebar);
+							res.write('<section id="text">');
+							res.write('<h3>Text file : ' + filename + '</h3>');
+							res.write('<div>');
+							res.write(fs.readFileSync('./files' + req.url));
+							res.write('</div>');
+							res.write(fs.readFileSync('./resources/server/footer.html'));
+						}
+						else {
+							res.setHeader('Content-type','text/plain');
+							res.write(fs.readFileSync('./files' + req.url));	
+						}
 					}
+					
+					res.end();
 				}
-			}
-			else {
-				//If the file isn't found, return 'File not found.'.
-				res.end('File not found.');
+				else {
+					res.end('File not found - 404.');
+				}
 			}
 		}
 		//Stop the response.

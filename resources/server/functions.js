@@ -1,8 +1,3 @@
-function share() {
-	var shareurl = window.location.origin;
-	console.log('Sharing ' + shareurl);
-}
-
 $(document).ready(function () {
 	$('section#underbar ul li').mouseenter(function () {
 		$(this).find('span').fadeIn('fast');
@@ -12,3 +7,15 @@ $(document).ready(function () {
        $(this).find('span').fadeOut('fast');
     });
 });
+
+function togo() {
+    var link = '/?zip';
+    console.log($('section#list table tbody tr td:first-child input'));
+    $('section#list table tbody tr td:first-child input').each(function (i) {
+        if ($('section#list table tbody tr td:first-child input').is(':checked')) {
+            link += '&' + $($('section#list table tbody tr td:first-child input')[i]).attr('class');    
+        }
+       
+    });
+    document.location = link;
+}
