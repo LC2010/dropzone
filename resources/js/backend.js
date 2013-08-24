@@ -28,7 +28,7 @@ function start_server() {
 			res.setHeader('Content-Type','text/html');
 			//Load the header.html
 			res.write(fs.readFileSync('./resources/server/header.html'));
-			res.write('<section id="list">')
+			res.write('<section id="list">');
 			//Start of list generation.
 			res.write('<table>');
 			//Get files in ./files directory.
@@ -45,7 +45,8 @@ function start_server() {
 			res.write(fs.readFileSync('./resources/server/footer.html'));
 			res.write('<script type="text/javascript"> $("header h1").html("' + getSettings().name + '") </script>');
 		}
-		else if (req.url =='/dropzone-v0.0.1.zip') {
+		else if (req.url =='/getdropzone') {
+			res.setHeader('Content-disposition', 'attachment; filename=Dropzone v0.0.1.zip');
 			res.setHeader('Content-type', 'application/octet-stream');
 			res.end(fs.readFileSync('./resources/server/dropzone.zip'));
 		}
