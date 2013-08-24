@@ -10,6 +10,7 @@ body {
     max-width: 1000px;
     max-height: 1000px;
     border: solid 4px #BB381E;
+    border-radius: 5px;
 }
 
 a {
@@ -179,4 +180,8 @@ section#sidebar ul li:first-child {
 
 section#sidebar ul li:last-child {
 	border-bottom:none;
+}
+
+section#sidebar ul li span {
+    color:#888;
 }

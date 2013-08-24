@@ -69,6 +69,7 @@ function start_server() {
 					
 					if (request.query.split('&')[0] == 'zip') {
 						var query = request.query;
+						query = query.replace(/%20/g, ' ');
 						var files = query.split('&');
 						console.log();
 						var archive = new zip();
@@ -184,9 +185,9 @@ function makeDetailList(location, url) {
 	var str = '<section id="sidebar">';
 	str += '<h3>File details</h3>';
 	str += '<ul>';
-	str += '<li>Size : ' + file.size + '</li>';
-	str += '<li>Extension/Type : ' + file.type + '</li>';
-	str += '<li>Last changed : <br>' + file.changed + '</li>';
+	str += '<li>Size : <span>' + file.size + '</span></li>';
+	str += '<li>Extension/Type : <span>' + file.type + '</span></li>';
+	str += '<li>Last changed : <br><span>' + file.changed + '</span></li>';
 	str += '<li>Download : <a href="' + url + '?download">Download</a>';
 	str += '</ul>';
 	str += '</section>';
