@@ -21,11 +21,6 @@ a:hover {
    text-decoration:underline;
 }
 
-a.a2a_dd, a.a2a_dd:hover {
-	color:#FFF;
-	text-decoration:none;
-}
-
 /* Header styles */
 
 header {
@@ -66,6 +61,14 @@ section#underbar {
     border-top:solid 2px #000;
 }
 
+section#underbar * a {
+	color:#FFF;
+}
+
+section#underbar * a:hover {
+	text-decoration:none;
+}
+
 section#underbar ul {
     padding-left:0px;
     position: relative;
@@ -76,7 +79,7 @@ section#underbar ul {
 section#underbar ul li {
     list-style:none;
     float: left;
-    margin-left: 20.7%;
+    margin-left: 15.5%;
 }
 
 section#underbar ul li span {
@@ -117,9 +120,15 @@ section#list table tbody tr:last-child td {
 }
 
 section#list table tbody tr th:first-child, section#list table tbody tr td:first-child {
-    width: 65%;
+    width: 7%;
     text-align: center;
 }
+
+section#list table tbody tr th:nth-child(2), section#list table tbody tr td:nth-child(2) {
+    width:65%;
+    padding-left:20px;
+}
+
 section#list table tbody tr th:last-child, section#list table tbody tr td:last-child {
     text-align: center;
     width: 10%;
@@ -139,8 +148,7 @@ section#image, section#text {
 
 section h3 {
     padding:15px;
-    font-size:25px
-;
+    font-size:25px;
 }
 
 section#image img {
